@@ -1,15 +1,30 @@
-@import "tailwindcss";
+@font-face {
+  font-family: OpenSansRegular;
+  src: url('assets/fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: OpenSansLight;
+  src: url('assets/fonts/Open_Sans/OpenSans-Light.ttf');
+}
+
+@import 'tailwindcss';
+
+@theme {
+  --font-open-sans-regular: OpenSansRegular, 'sans-serif';
+  --font-open-sans-light: OpenSansLight, 'sans-serif';
+}
 
 body {
   @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

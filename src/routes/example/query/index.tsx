@@ -31,7 +31,7 @@ const Todos = () => {
   return (
     <div>
       {(data || []).map((article) => (
-        <div className="px-2 border-b-2 border-b-gray-300">
+        <div className="px-2 border-b-2 border-b-gray-300 font-open-sans-regular">
           {article.work.title}
         </div>
       ))}
