@@ -30,8 +30,11 @@ const Todos = () => {
   }
   return (
     <div>
-      {(data || []).map((article) => (
-        <div className="px-2 border-b-2 border-b-gray-300 font-open-sans-regular">
+      {(data || []).map((article, index) => (
+        <div
+          className="px-2 border-b-2 border-b-gray-300 font-open-sans-regular"
+          key={index}
+        >
           {article.work.title}
         </div>
       ))}
