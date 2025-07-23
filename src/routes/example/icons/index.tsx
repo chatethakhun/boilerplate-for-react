@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import * as Icons from 'ctk-icons'
 
-export const Route = createFileRoute('/icons/')({
+export const Route = createFileRoute('/example/icons/')({
   component: RouteComponent,
 })
 

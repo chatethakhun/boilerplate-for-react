@@ -10,53 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as IconsIndexRouteImport } from './routes/icons/index'
-import { Route as IconsPageRouteImport } from './routes/icons/page'
+import { Route as ExampleQueryIndexRouteImport } from './routes/example/query/index'
+import { Route as ExampleIconsIndexRouteImport } from './routes/example/icons/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IconsIndexRoute = IconsIndexRouteImport.update({
-  id: '/icons/',
-  path: '/icons/',
+const ExampleQueryIndexRoute = ExampleQueryIndexRouteImport.update({
+  id: '/example/query/',
+  path: '/example/query/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IconsPageRoute = IconsPageRouteImport.update({
-  id: '/icons/page',
-  path: '/icons/page',
+const ExampleIconsIndexRoute = ExampleIconsIndexRouteImport.update({
+  id: '/example/icons/',
+  path: '/example/icons/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/icons/page': typeof IconsPageRoute
-  '/icons': typeof IconsIndexRoute
+  '/example/icons': typeof ExampleIconsIndexRoute
+  '/example/query': typeof ExampleQueryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/icons/page': typeof IconsPageRoute
-  '/icons': typeof IconsIndexRoute
+  '/example/icons': typeof ExampleIconsIndexRoute
+  '/example/query': typeof ExampleQueryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/icons/page': typeof IconsPageRoute
-  '/icons/': typeof IconsIndexRoute
+  '/example/icons/': typeof ExampleIconsIndexRoute
+  '/example/query/': typeof ExampleQueryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/icons/page' | '/icons'
+  fullPaths: '/' | '/example/icons' | '/example/query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/icons/page' | '/icons'
-  id: '__root__' | '/' | '/icons/page' | '/icons/'
+  to: '/' | '/example/icons' | '/example/query'
+  id: '__root__' | '/' | '/example/icons/' | '/example/query/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  IconsPageRoute: typeof IconsPageRoute
-  IconsIndexRoute: typeof IconsIndexRoute
+  ExampleIconsIndexRoute: typeof ExampleIconsIndexRoute
+  ExampleQueryIndexRoute: typeof ExampleQueryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,18 +68,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/icons/': {
-      id: '/icons/'
-      path: '/icons'
-      fullPath: '/icons'
-      preLoaderRoute: typeof IconsIndexRouteImport
+    '/example/query/': {
+      id: '/example/query/'
+      path: '/example/query'
+      fullPath: '/example/query'
+      preLoaderRoute: typeof ExampleQueryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/icons/page': {
-      id: '/icons/page'
-      path: '/icons/page'
-      fullPath: '/icons/page'
-      preLoaderRoute: typeof IconsPageRouteImport
+    '/example/icons/': {
+      id: '/example/icons/'
+      path: '/example/icons'
+      fullPath: '/example/icons'
+      preLoaderRoute: typeof ExampleIconsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -87,8 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  IconsPageRoute: IconsPageRoute,
-  IconsIndexRoute: IconsIndexRoute,
+  ExampleIconsIndexRoute: ExampleIconsIndexRoute,
+  ExampleQueryIndexRoute: ExampleQueryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
