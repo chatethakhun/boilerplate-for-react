@@ -1,4 +1,4 @@
-Welcome to your new TanStack app! 
+Welcome to your new TanStack app!
 
 # Getting Started
 
@@ -6,7 +6,7 @@ To run this application:
 
 ```bash
 npm install
-npm run start  
+npm run start
 ```
 
 # Building For Production
@@ -299,3 +299,43 @@ Files prefixed with `demo` can be safely deleted. They are there to provide a st
 # Learn More
 
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+
+# Custom Font family
+```css
+@font-face {
+  font-family: OpenSansRegular; // change here
+  src: url('assets/fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: OpenSansLight; // Or here
+  src: url('assets/fonts/Open_Sans/OpenSans-Light.ttf');
+}
+
+@theme {
+  --font-open-sans-regular: OpenSansRegular, 'sans-serif'; // Add variable for call font class then use in className
+  --font-open-sans-light: OpenSansLight, 'sans-serif'; // Add variable for call font class then use in className
+  --main-color: #333;
+}
+```
+
+# Custom color theme
+
+```css
+@theme {
+
+  --main-color: #333; // add here
+}
+```
+
+
+# Icons
+use icon from library omoo icons
+
+example
+
+```tsx
+import { ArrowCurveLeftDown } from 'omoo-icons'
+
+return <ArrowCurveLeftDown className="text-2xl text-blue-200" />
+```

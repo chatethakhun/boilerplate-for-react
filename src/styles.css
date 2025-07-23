@@ -9,7 +9,7 @@
 }
 
 @import 'tailwindcss';
-
+/* Add color theme to this */
 @theme {
   --font-open-sans-regular: OpenSansRegular, 'sans-serif';
   --font-open-sans-light: OpenSansLight, 'sans-serif';
