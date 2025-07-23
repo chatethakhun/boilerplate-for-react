@@ -11,7 +11,7 @@ function RouteComponent() {
     navigator.clipboard.writeText(`<${iconName} />`)
   }, [])
   return (
-    <div className="flex flex-col gap-2 flex-wrap px-2">
+    <div className="grid grid-cols-4 gap-2 px-2">
       {Object.entries(Icons).map(([name, Icon]) => (
         <div className="flex  items-center gap-2">
           <div className="flex items-center justify-center w-4 h-4 ">
