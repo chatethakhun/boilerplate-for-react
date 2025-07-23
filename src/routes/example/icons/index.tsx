@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import * as Icons from 'ctk-icons'
+import * as Icons from 'omoo-icons'
 
 export const Route = createFileRoute('/example/icons/')({
   component: RouteComponent,
