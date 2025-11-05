@@ -310,6 +310,9 @@ You can find out everything you need to know on how to use TanStack Store in the
   --font-open-sans-light: OpenSansLight, 'sans-serif'; // Add variable for call font class then use in className
   --main-color: #333;
 }
+
+Or use From @fontsource (Recommended)
+![Fontsource](https://fontsource.org)
 ```
 
 # Custom color theme
@@ -328,7 +331,7 @@ use icon from library omoo icons
 example
 
 ```tsx
-import { ArrowCurveLeftDown } from 'omoo-icons'
+import ArrowCurveLeftDown from 'omoo-icons/icons/ArrowCurveLeftDown'
 
 return <ArrowCurveLeftDown className="text-2xl text-blue-200" />
 ```
