@@ -1,12 +1,27 @@
 import axios from 'axios'
-import { getAccessToken } from '@/utils/auth'
+import AuthService from '@/services/auth.service'
 
 const instance = axios.create({
-  baseURL: process.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${getAccessToken()}`,
   },
 })
+
+// Request Interceptor - เพิ่ม token ทุกครั้งที่ request
+instance.interceptors.request.use(
+  (config) => {
+    const token = AuthService.getToken()
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
 
 export default instance

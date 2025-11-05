@@ -341,3 +341,7 @@ Files prefixed with `demo` can be safely deleted. They are there to provide a st
 # Learn More
 
 You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+
+
+![Bundle Size](https://img.shields.io/bundlephobia/min/omoo-icons)
+![Tree Shaking](https://img.shields.io/badge/tree%20shaking-supported-brightgreen)

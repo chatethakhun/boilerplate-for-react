@@ -10,53 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ExampleQueryIndexRouteImport } from './routes/example/query/index'
-import { Route as ExampleIconsIndexRouteImport } from './routes/example/icons/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExampleQueryIndexRoute = ExampleQueryIndexRouteImport.update({
-  id: '/example/query/',
-  path: '/example/query/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExampleIconsIndexRoute = ExampleIconsIndexRouteImport.update({
-  id: '/example/icons/',
-  path: '/example/icons/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/example/icons': typeof ExampleIconsIndexRoute
-  '/example/query': typeof ExampleQueryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/example/icons': typeof ExampleIconsIndexRoute
-  '/example/query': typeof ExampleQueryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/example/icons/': typeof ExampleIconsIndexRoute
-  '/example/query/': typeof ExampleQueryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/example/icons' | '/example/query'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/example/icons' | '/example/query'
-  id: '__root__' | '/' | '/example/icons/' | '/example/query/'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ExampleIconsIndexRoute: typeof ExampleIconsIndexRoute
-  ExampleQueryIndexRoute: typeof ExampleQueryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,27 +48,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/example/query/': {
-      id: '/example/query/'
-      path: '/example/query'
-      fullPath: '/example/query'
-      preLoaderRoute: typeof ExampleQueryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/example/icons/': {
-      id: '/example/icons/'
-      path: '/example/icons'
-      fullPath: '/example/icons'
-      preLoaderRoute: typeof ExampleIconsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ExampleIconsIndexRoute: ExampleIconsIndexRoute,
-  ExampleQueryIndexRoute: ExampleQueryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
