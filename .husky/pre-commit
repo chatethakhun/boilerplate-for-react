@@ -1,6 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# ระบุ path ของ bun โดยตรง
+export PATH="$HOME/.bun/bin:$PATH"
 
 echo "🔍 Type checking and building..."
-bun run type-check
-bun run build
+bun run tsc && bun run vite build
