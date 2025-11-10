@@ -10,7 +10,8 @@
     "test": "vitest run",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -42,6 +43,7 @@
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-import": "^1.13.8",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.3",
     "typescript": "^5.7.2",
