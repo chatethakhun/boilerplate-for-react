@@ -1,0 +1,5 @@
+# ระบุ path ของ bun โดยตรง
+export PATH="$HOME/.bun/bin:$PATH"
+
+echo "🔍 Type checking and building..."
+bun run tsc && bun run vite build
