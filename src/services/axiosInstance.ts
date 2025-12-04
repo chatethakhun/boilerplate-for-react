@@ -1,27 +1,52 @@
 import axios from 'axios'
-import AuthService from '@/services/auth.service'
+import AuthToken from '@/utils/auth'
 
-const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+class ApiClient {
+  private instance
 
-// Request Interceptor - เพิ่ม token ทุกครั้งที่ request
-instance.interceptors.request.use(
-  (config) => {
-    const token = AuthService.getToken()
+  constructor() {
+    this.instance = axios.create({
+      baseURL: import.meta.env.VITE_API_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+    this.setupInterceptors()
+  }
 
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  },
-)
+  private setupInterceptors() {
+    this.instance.interceptors.request.use(
+      (config) => {
+        const token = AuthToken.getAccessToken()
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error),
+    )
+  }
 
-export default instance
+  get<T>(url: string, config?: object) {
+    return this.instance.get<T>(url, config)
+  }
+
+  post<T>(url: string, data?: object, config?: object) {
+    return this.instance.post<T>(url, data, config)
+  }
+
+  put<T>(url: string, data?: object, config?: object) {
+    return this.instance.put<T>(url, data, config)
+  }
+
+  patch<T>(url: string, data?: object, config?: object) {
+    return this.instance.patch<T>(url, data, config)
+  }
+
+  delete<T>(url: string, config?: object) {
+    return this.instance.delete<T>(url, config)
+  }
+}
+
+export default new ApiClient()
