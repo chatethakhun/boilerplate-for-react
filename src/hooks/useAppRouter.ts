@@ -1,151 +1,186 @@
-import * as React from 'react'
+import { useCallback, useMemo } from 'react'
 import { useLocation, useRouter, useRouterState } from '@tanstack/react-router'
 
-/** --------- types (คงสัญญาเดียว แม้เปลี่ยน lib ภายหลัง) --------- */
+/** --------- Types --------- */
 export type PathParams = Record<string, string | number | undefined>
-export type SearchParamsLike = Record<string, any> | undefined
-
+export type SearchParamsLike = Record<string, unknown>
 export type NavigateInput =
   | string
   | {
-      to: string // e.g. "/flash/$couponId/active"
-      params?: PathParams // { couponId: "123" }
-      search?: SearchParamsLike // { tab: "info" }
-      hash?: string // "top"
+      to: string
+      params?: PathParams
+      search?: SearchParamsLike
+      hash?: string
     }
 
 export interface AppRouterAPI {
   push: (to: NavigateInput) => void
   replace: (to: NavigateInput) => void
   back: (fallbackPath?: string) => void
-
+  forward: () => void
   pathname: string
   params: Record<string, string>
   query: Record<string, string>
-
+  hash: string
   href: (to: NavigateInput) => string
+  isActive: (path: string) => boolean
 }
 
-/** --------- helpers --------- */
-function buildPath(
+/** --------- Helpers --------- */
+const buildSearchParams = (search?: SearchParamsLike): string => {
+  if (!search || Object.keys(search).length === 0) return ''
+
+  const params = new URLSearchParams()
+  for (const [key, value] of Object.entries(search)) {
+    if (value != null) {
+      params.set(key, String(value))
+    }
+  }
+  return `?${params.toString()}`
+}
+
+const buildPath = (
   template: string,
   params?: PathParams,
   search?: SearchParamsLike,
   hash?: string,
-) {
-  const path = template.replace(/\$([A-Za-z0-9_]+)/g, (_, k) => {
-    const v = params?.[k]
-    if (v === undefined || !v) {
-      throw new Error(`Missing param '${k}' for path '${template}'`)
+): string => {
+  const path = template.replace(/\$([A-Za-z0-9_]+)/g, (_, key: string) => {
+    const value = params?.[key]
+    if (value == null) {
+      throw new Error(`Missing param '${key}' for path '${template}'`)
     }
-    return encodeURIComponent(String(v))
+    return encodeURIComponent(String(value))
   })
 
-  const qs =
-    search && Object.keys(search).length
-      ? `?${new URLSearchParams(
-          Object.entries(search).reduce<Record<string, string>>(
-            (acc, [k, v]) => {
-              if (v === undefined || v === null) return acc
-              acc[k] = String(v)
-              return acc
-            },
-            {},
-          ),
-        ).toString()}`
-      : ''
-
+  const qs = buildSearchParams(search)
   const h = hash ? `#${hash.replace(/^#/, '')}` : ''
+
   return `${path}${qs}${h}`
 }
 
-/** --------- the hook (TanStack implementation today) --------- */
+const parseParams = (
+  matches: { params: Record<string, unknown> }[],
+): Record<string, string> => {
+  const merged = Object.assign({}, ...matches.map((m) => m.params))
+  const result: Record<string, string> = {}
+
+  for (const [key, value] of Object.entries(merged)) {
+    if (value != null) {
+      result[key] = String(value)
+    }
+  }
+  return result
+}
+
+const parseQuery = (search: Record<string, string>): Record<string, string> => {
+  const result: Record<string, string> = {}
+  for (const [key, value] of Object.entries(search)) {
+    if (value != null) {
+      result[key] = value
+    }
+  }
+  return result
+}
+
+/** --------- Hook --------- */
 export function useAppRouter(): AppRouterAPI {
   const router = useRouter()
   const location = useLocation()
-  const state = useRouterState()
+  const { matches } = useRouterState()
 
-  const params = React.useMemo(() => {
-    // รวม params จากทุก match
-    const merged = Object.assign({}, ...state.matches.map((m) => m.params))
-    const out: Record<string, string> = {}
-    for (const [k, v] of Object.entries(merged)) {
-      if (v != null) out[k] = String(v)
-    }
-    return out
-  }, [state.matches])
+  const params = useMemo(() => parseParams(matches), [matches])
+  const query = useMemo(
+    () => parseQuery(location.search as Record<string, string>),
+    [location.search],
+  )
 
-  const query = React.useMemo(() => {
-    const sp = new URLSearchParams(location.search)
-    const obj: Record<string, string> = {}
-    sp.forEach((v, k) => (obj[k] = v))
-    return obj
-  }, [location.search])
-
-  const href = React.useCallback((to: NavigateInput) => {
-    if (typeof to === 'string') return to
-    return buildPath(to.to, to.params, to.search, to.hash)
+  const href = useCallback((to: NavigateInput): string => {
+    return typeof to === 'string'
+      ? to
+      : buildPath(to.to, to.params, to.search, to.hash)
   }, [])
 
-  const push = React.useCallback(
-    (to: NavigateInput) => {
+  const navigate = useCallback(
+    (to: NavigateInput, replaceMode: boolean) => {
       if (typeof to === 'string') {
-        router.navigate({ to, replace: false })
+        router.navigate({ to, replace: replaceMode })
       } else {
-        router.navigate({
+        const options: Parameters<typeof router.navigate>[0] = {
           to: to.to,
-          params: to.params as any,
-          search: to.search as any,
-          hash: to.hash,
-          replace: false,
-        })
+          replace: replaceMode,
+        }
+
+        if (to.params) {
+          options.params = to.params as never
+        }
+        if (to.search) {
+          options.search = to.search as never
+        }
+        if (to.hash) {
+          options.hash = to.hash
+        }
+
+        router.navigate(options)
       }
     },
     [router],
   )
 
-  const replace = React.useCallback(
-    (to: NavigateInput) => {
-      if (typeof to === 'string') {
-        router.navigate({ to, replace: true })
-      } else {
-        router.navigate({
-          to: to.to,
-          params: to.params as any,
-          search: to.search as any,
-          hash: to.hash,
-          replace: true,
-        })
-      }
-    },
-    [router],
+  const push = useCallback(
+    (to: NavigateInput) => navigate(to, false),
+    [navigate],
+  )
+  const replace = useCallback(
+    (to: NavigateInput) => navigate(to, true),
+    [navigate],
   )
 
-  const back = React.useCallback(
+  const back = useCallback(
     (fallbackPath = '/') => {
-      // ถ้ามี referrer ใน state หรือมี history
-      const canGoBack = window.history.length > 1
-
-      if (canGoBack) {
+      if (window.history.length > 1) {
         router.history.go(-1)
       } else {
-        // ไม่มี history ให้ back -> ไปหน้า fallback
         router.navigate({ to: fallbackPath })
       }
     },
     [router],
   )
 
-  return React.useMemo(
+  const forward = useCallback(() => {
+    router.history.go(1)
+  }, [router])
+
+  const isActive = useCallback(
+    (path: string) =>
+      location.pathname === path || location.pathname.startsWith(`${path}/`),
+    [location.pathname],
+  )
+
+  return useMemo(
     () => ({
       push,
       replace,
       back,
+      forward,
       pathname: location.pathname,
       params,
       query,
+      hash: location.hash,
       href,
+      isActive,
     }),
-    [push, replace, back, location.pathname, params, query, href],
+    [
+      push,
+      replace,
+      back,
+      forward,
+      location.pathname,
+      location.hash,
+      params,
+      query,
+      href,
+      isActive,
+    ],
   )
 }

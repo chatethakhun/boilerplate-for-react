@@ -43,12 +43,13 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
     "babel-plugin-import": "^1.13.8",
+    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "^5.9.3",
     "vite": "^6.4.1",
     "vitest": "^3.2.4",
-    "husky": "^9.1.7",
     "web-vitals": "^4.2.4"
   }
 }
